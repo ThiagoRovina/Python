@@ -1,0 +1,121 @@
+from tkinter import *
+import re
+
+
+def nova_janela():
+    nome = nome_entry.get()
+    email = email_entry.get()
+    senha = senha_entry.get()
+
+    if len(nome) == 0:
+        mensagem["text"] = "Nenhum nome inserido!"
+    elif not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        mensagem["text"] = "Email inválido"
+    elif senha == "":
+        mensagem["text"] = "Nenhuma senha inserida!"
+    else:
+        dados_cadastro.append((email, senha))
+        mensagem["text"] = "Cadastro realizado com sucesso!"
+
+        nova_janela = Toplevel(janela)
+        nova_janela.geometry("220x220")
+        
+        nova_janela['bg'] = 'red'
+        nova_janela.resizable(False, False)
+
+        def calcular():
+            resultado.delete(0, END)
+
+            try:
+
+                exp = entrada.get()
+                res = eval(exp)
+                resultado.insert(0, res)
+
+
+            except:
+
+                resultado.insert(0, "Erro de cálculo")
+
+        entrada = Entry(nova_janela, width=30)
+        entrada.grid(row=0, column=0, columnspan=4, padx=5, pady=5)
+
+        resultado = Entry(nova_janela, width=30)
+        resultado.grid(row=1, column=0, columnspan=4, padx=5, pady=5)
+
+
+
+
+        numeros = "789456123 0 "
+        lin = 2
+        col = 0
+
+        for num in numeros:
+            button = Button(nova_janela, text=num, width=5, command=lambda x=num: entrada.insert(END, x))
+            button.grid(row=lin, column=col, padx=5, pady=5)
+            col += 1
+
+            if col > 2:
+                col = 0
+                lin += 1
+
+
+        operacoes = "+-*/"
+        lin = 2
+        col = 3
+
+        for op in operacoes:
+            button = Button(nova_janela, text=op, width=5, command=lambda x=op: entrada.insert(END, x))
+            button.grid(row=lin, column=col, padx=5, pady=5)
+            lin += 1
+
+
+        button = Button(nova_janela, text="=", width=5, command=calcular)
+        button.grid(row=5, column=3, padx=5, pady=5)
+
+
+
+
+
+
+
+
+
+janela = Tk()
+janela.geometry("900x600")
+janela.resizable(False, False)
+janela.title("Calculadora")
+bg = PhotoImage(file = "fundo2.png")
+Fundo = Canvas( janela, width = 400, height = 400)
+Fundo.pack(fill="both", expand=True)
+Fundo.create_image(0, 0, image=bg,anchor="nw")
+
+cadastre_se_label = Label(janela, font="Arial 21",fg="white", width=10, text="Cadastre-se", bg="#dd807a")
+cadastre_se_label.place(x=100, y=70)
+
+nome_label = Label(janela, text="Nome",fg="white", font="Arial 12", bg="#c42217")
+nome_label.place(x=230, y=230)
+nome_entry = Entry(janela, width=40,font="Arial 13")
+nome_entry.place(x=300, y=230)
+
+email_label = Label(janela, text="Email",fg="white", font="Arial 12", bg="#c42217")
+email_label.place(x=230, y=280)
+email_entry = Entry(janela, width=40,font="Arial 13")
+email_entry.place(x=300, y=280)
+
+senha_label = Label(janela, text="Senha", fg="white", font="Arial 12", bg="#c42217")
+senha_label.place(x=230, y=330)
+senha_entry = Entry(janela, width=40,show="*",font="Arial 13")
+senha_entry.place(x=300, y=330)
+
+entrar_button = Button(janela, font="Arial", text="ENTRAR", width=20, command=nova_janela)
+entrar_button.place(x=350, y=400)
+
+mensagem = Label(janela, text="", font="Arial 12", fg="white", bg="#c42217")
+mensagem.place(x=350, y=340)
+mensagem_1 = Label(janela, text="", font="Arial 12", fg="white", bg="#152039")
+mensagem.place(x=367, y=442)
+
+dados_cadastro = []
+
+janela.mainloop()
