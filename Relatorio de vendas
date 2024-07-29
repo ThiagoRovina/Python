@@ -1,0 +1,133 @@
+
+vendas = []
+
+# Função para registrar uma venda
+def registrar_venda():
+    print('----------- REGISTRAR VENDAS -----------')
+    print('\t== TIPOS DE USUARIO ==\nSelecione a opcao')
+    print('1-Aluno\n2-Servidor com salario menor ou igual que 3 salario minimos\n3-Servidor maior que 3 salarios minimos\n4-Docente\n5-Externo')
+
+    # Recebe o tipo de usuário
+    tipo_usuario = int(input('>'))
+
+    # Verifica se o tipo de usuário é válido
+    if tipo_usuario not in [1, 2, 3, 4, 5]:
+        print(" ========= ERROR ========= ")
+        return 0
+
+    # Recebe a quantidade de tíquetes
+    quantidade_tikets = int(input("Quantidade de tikets:"))
+
+    # Determina o preço com base no tipo de usuário
+    if tipo_usuario == 1 or tipo_usuario == 2:
+        preco = 5.00
+    elif tipo_usuario == 3 or tipo_usuario == 4:
+        preco = 10.00
+    elif tipo_usuario == 5:
+        preco = 19.00
+
+
+    preco_total = quantidade_tikets * preco
+
+    print("\tQual a forma de pagamento?\n1-Dinheiro\n2-PIX\n3-Cartao")
+    forma_pagamento = int(input(">"))
+
+    # Determina a forma de pagamento com base na entrada do usuário
+    if forma_pagamento == 1:
+        forma_pagamento_str = "dinheiro"
+    elif forma_pagamento == 2:
+        forma_pagamento_str = "pix"
+    elif forma_pagamento == 3:
+        forma_pagamento_str = "cartao"
+    else:
+        forma_pagamento_str = "desconhecido"
+
+
+    print(f"Preco a pagar: R${preco_total:.2f}")
+    confirmar_venda = int(input("\t-- Confirmar venda?--\n1-SIM\n2-NAO\n->"))
+
+    # Se a venda for confirmada adiciona os detalhes da venda à lista
+    if confirmar_venda == 1:
+        if tipo_usuario == 1:
+            tipo_usuario_str = "aluno"
+        elif tipo_usuario == 2:
+            tipo_usuario_str = "servidor<=3"
+        elif tipo_usuario == 3:
+            tipo_usuario_str = "servidor>3"
+        elif tipo_usuario == 4:
+            tipo_usuario_str = "docente"
+        elif tipo_usuario == 5:
+            tipo_usuario_str = "externo"
+
+        vendas.append({
+            'tipo_usuario': tipo_usuario_str,
+            "quantidade_tikets": quantidade_tikets,
+            "forma_pagamento": forma_pagamento_str,
+            "preco_total": preco_total
+        })
+        print("\t======= VENDA REGISTRADA =======")
+    else:
+        print("\t ========= VENDA NÃO CONFIRMADA =========")
+
+
+def imprime(): # Função para exibir o relatório de vendas
+
+    tipos_usuarios = ["aluno", "servidor<=3", "servidor>3", "docente", "externo"]
+    vendas_por_usuario = {tipo: 0 for tipo in tipos_usuarios}
+
+
+    formas_pagamento = ["dinheiro", "pix", "cartao"]
+    receita_por_pagamento = {forma: 0 for forma in formas_pagamento}
+
+    # Calcula a quantidade de tíquetes vendidos e a receita por tipo de usuário e forma de pagamento
+    for venda in vendas:
+        vendas_por_usuario[venda["tipo_usuario"]] += venda["quantidade_tikets"]
+        receita_por_pagamento[venda["forma_pagamento"]] += venda["preco_total"]
+
+    total_tiquetes = sum(venda["quantidade_tikets"] for venda in vendas)
+    receita_total = sum(venda["preco_total"] for venda in vendas)
+
+    # Verifica se há vendas registradas
+    if total_tiquetes == 0 or receita_total == 0:
+        print("Nenhuma venda registrada para gerar gráficos.")
+        return
+
+    # Calcula a porcentagem de vendas por tipo de usuário e a forma de pagamento
+    porcentagens_vendas = {tipo: (quantidade / total_tiquetes) * 100 for tipo, quantidade in vendas_por_usuario.items()}
+    porcentagens_receita = {forma: (receita / receita_total) * 100 for forma, receita in receita_por_pagamento.items()}
+
+    # Exibe a porcentagem de tíquetes vendidos por tipo de usuário
+    print("\nGráfico de porcentagem de tíquetes vendidos por tipo de usuário:")
+    for tipo, porcentagem in porcentagens_vendas.items():
+        barras = '\u2588' * int(porcentagem // 2)
+        print(f"{tipo:<15} {barras} {porcentagem:.1f}%")
+
+    # Exibe a porcentagem da forma de pagamento
+    print("\nGráfico de porcentagem de receita por forma de pagamento:")
+    for forma, porcentagem in porcentagens_receita.items():
+        barras = '\u2588' * int(porcentagem // 2)
+        print(f"{forma:<15} {barras} {porcentagem:.1f}%")
+
+def menu():
+    while True:
+        print("\n=========== Menu Principal ===========")
+        print("1-Registrar Venda\n2-Exibir relatorio\n3-Sair ")
+        opcao = int(input("Escolha uma opção: "))
+
+        if opcao == 1:
+            print("-" * 20)
+            registrar_venda()
+            print('-' * 20)
+        elif opcao == 2:
+            print('-' * 20)
+            imprime()
+            print('-' * 20)
+        elif opcao == 3:
+            print("Saindo...")
+            break
+        else:
+            print("Opção inválida. Tente novamente.")
+
+
+menu()
+
