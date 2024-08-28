@@ -1,4 +1,4 @@
-mport numpy as np
+import numpy as np
 from dataclasses import dataclass
 
 #------------------- Matrizes ----------------------
@@ -119,3 +119,41 @@ total_soma = soma_recursiva_matriz(matriz)
 print("Soma de todos os elementos da matriz:")
 print(matriz)
 print("Total da soma:", total_soma)
+
+#=================================
+from dataclasses import dataclass
+from typing import List
+#bobina de papel, chapas, paine de fibra
+#gerenciar o estoque de vendas de produtos da empresa:
+#       -monitorar o estoque
+#       -demanda
+#       -carregamento de estoque
+#variaveis: pedidos, vendas, venda_mes, produto, quantidade
+class Produto:
+    def __init__(self, nome: str, quantidade: int):
+        self.nome = nome
+        self.quantidade = quantidade
+
+def vendas_mes(pedidos: List[Produto]) -> List[Produto]:
+    vendas = {}
+    for pedido in pedidos:
+        nome_produto = pedido.nome
+        quantidade_vendida = pedido.quantidade
+        if nome_produto in vendas:
+            vendas[nome_produto] += quantidade_vendida
+        else:
+            vendas[nome_produto] = quantidade_vendida
+    resultado = [Produto(nome, quantidade) for nome, quantidade in vendas.items()]
+    return resultado
+# Exemplo de uso;
+pedidos = [Produto("Bobina", 100), Produto("Chapa", 50), Produto("Bobina", 30), Produto("Painel", 20), Produto("Chapa", 15), Produto("Bobina", 17)]
+resultado = vendas_mes(pedidos)
+print("PRODUTO                        â    ESTOQUE   â")
+print("-"*47)
+for produto in resultado:
+    print(f"{produto.nome}:\t\t\t\t\t\t\t\t {produto.quantidade}")
+
+
+print("-"*47)
+
+
