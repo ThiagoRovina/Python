@@ -1,0 +1,121 @@
+mport numpy as np
+from dataclasses import dataclass
+
+#------------------- Matrizes ----------------------
+# Matrizes em python e uma estrutura de dados bidimensional que é usada para
+# armazenar uma coleçao de elementos organizados em linhas e colunas
+
+#==== EXEMPLO:
+matriz = [
+     [4, 5, 6, 12],
+     [1, 2, 3, 22],     #Isso é uma matriz 3x4 (3Linhas, 4Colunas)
+     [7, 8, 9, 13]
+ ]
+
+#Para acessar açgum valor especifico da matriz basta fazer isso:
+escolher_elemento= matriz[0][3] #linha [0] que seria a primeira, coluna[3] que seria [0,1,2,3]
+print(escolher_elemento)
+
+#Para percorrer uma matriz:
+for linha in matriz:
+    for escolher_elemento in linha:
+        print(escolher_elemento)
+
+#Adicionar um elemento na matriz:
+nova_linha=[50, 35, 21, 66]
+matriz.append(nova_linha)
+
+#Remover um elemento da matriz
+del matriz[1] # [1] que seria a linha  "[1, 2, 3, 22]"
+print(matriz)
+
+#Modificar um elemento na matriz:
+matriz[0][3]= 10 # tira o valor [12] e coloca o [10]
+print(matriz)
+
+# Operaçoes em matrizes:
+#Você pode realizar várias operações em matrizes,
+# como adição, subtração, multiplicação, transposição, etc...
+# Para isso, você pode usar bibliotecas como NumPy, que é amplamente
+# utilizada para trabalhar com matrizes e arrays numéricos em Python
+# import numpy as np
+# se nao tiver vai no powerchell ou cmd e digite " pip install numpy "
+
+matriz1 = np.array([[1, 2], [3, 4]])
+matriz2 = np.array([[5, 6], [7, 8]])
+
+soma = matriz1 + matriz2
+print(soma)
+print("\t\t=========== MATRIZES COM CLASSES E RECURSIVIDADE =================\n")
+# --------------------------- MATRIZES COM CLASSES E RECURSIVIDADE -------------------------------
+#Primeiro, criamos uma classe Matrix que representa uma matriz e fornece métodos
+# para realizar operações nela:
+# from dataclasses import dataclass  --IMPORTAR A BIBLIOTECA CLASSES
+class Matrix:
+    def __init__(self, rows, columns):
+        self.rows = rows
+        self.columns = columns
+        self.data = [[0 for _ in range(columns)] for _ in range(rows)]
+
+    def set_valores(self, valores):
+        for i in range(min(self.rows, len(valores))):
+            for j in range(min(self.columns, len(valores[i]))):
+                self.data[i][j] = valores[i][j]
+
+    def get_value(self, row, column):
+        return self.data[row][column]
+
+    def __str__(self):
+        return "\n".join([" ".join(map(str, row)) for row in self.data])
+
+def recursive_matrix_sum(matrix, row=0, column=0):
+    if row == matrix.rows:
+        return 0
+    elif column == matrix.columns:
+        return recursive_matrix_sum(matrix, row + 1, 0)
+    else:
+        current_value = matrix.get_value(row, column)
+        return current_value + recursive_matrix_sum(matrix, row, column + 1)
+#-----EXEMPLO para usar as funçoes:
+class Matriz:
+    def __init__(self, linhas, colunas):
+        self.linhas = linhas
+        self.colunas = colunas
+        self.dados = [[0 for _ in range(colunas)] for _ in range(linhas)]
+
+    def definir_valores(self, valores):
+        for i in range(min(self.linhas, len(valores))):
+            for j in range(min(self.colunas, len(valores[i]))):
+                self.dados[i][j] = valores[i][j]
+
+    def obter_valor(self, linha, coluna):
+        return self.dados[linha][coluna]
+
+    def __str__(self):
+        return "\n".join([" ".join(map(str, linha)) for linha in self.dados])
+
+def soma_recursiva_matriz(matriz, linha=0, coluna=0):
+    if linha == matriz.linhas:
+        return 0
+    elif coluna == matriz.colunas:
+        return soma_recursiva_matriz(matriz, linha + 1, 0)
+    else:
+        valor_atual = matriz.obter_valor(linha, coluna)
+        return valor_atual + soma_recursiva_matriz(matriz, linha, coluna + 1)
+
+# Cria uma matriz 3x4
+matriz = Matriz(3, 4)
+
+# Define valores na matriz
+valores = [
+     [4, 5, 6, 12],
+     [1, 2, 3, 22],     # Isso é uma matriz 3x4 (3 Linhas, 4 Colunas)
+     [7, 8, 9, 13]
+]
+matriz.definir_valores(valores)
+
+# Chama a função recursiva para calcular a soma
+total_soma = soma_recursiva_matriz(matriz)
+print("Soma de todos os elementos da matriz:")
+print(matriz)
+print("Total da soma:", total_soma)
